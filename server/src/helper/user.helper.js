@@ -18,14 +18,9 @@ class UserHelper {
     ); 
   }
 
-  async userCheck(email, userName, phoneNumber) {
-    console.log("inside usercheck")
+  async userCheck(email) {
     const emailExist = await model.findOne({ email: email })
     if (emailExist) throw { message: "Email already exists", status: false };
-    const usernameExist = await model.findOne({ userName: userName })
-    if (usernameExist) throw { message: "UserName already exists", status: false };
-    const phoneExist = await model.findOne({ phoneNumber: phoneNumber })
-    if (phoneExist) throw { message: "phoneNumber already exists", status: false }
   }
 
   async checkRequest(decodedToken,responses){

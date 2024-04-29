@@ -22,16 +22,12 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Routers
-// app.use('/', (req,res)=>{
-//   res.json({message : "successful "})
-// })
+Routers
+app.use('/', (req,res)=>{
+  res.json({message : "successful "})
+})
 app.use('/auth', Api.authRouter); 
-// app.use('/user', Api.otpRouter); 
-// app.use('/user', Api.billingRouter); 
-// app.use('/user', Api.courseRouter); 
-// app.use('/user', Api.referalRouter); 
-// app.use('/user', Api.affiliateRouter);
+app.use('/todo', Api.todoRouter); ;
 app.use('/status', (_req, res) => {
   return res.send({
     isSuccess: true,
@@ -42,16 +38,7 @@ app.use('/status', (_req, res) => {
     Date: new Date(),
 })
 });
-// app.use('/admin/adminArea', Api.rewardRouter);
-// app.use('/ASB',Api.asbRouter)
-// app.use('/admin/adminArea', Api.adminRouter); 
-// app.use('/question/', Api.questionAnsRouter); 
 
-
-// Attach WebSocket
-// attachWebSocket(server);
-
-// Start the server
 server.listen(port, (err) => {
   if (err) {
     return console.log('ERROR', err);

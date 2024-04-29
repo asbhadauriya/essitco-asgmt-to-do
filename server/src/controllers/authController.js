@@ -6,18 +6,17 @@ require('dotenv').config();
 const key = process.env.JWTKEY;
 const Helper = require('../helper/index');
 const otpHelper = require('../helper/otp.helper');
-const { OTPHelper } = Helper.module
+const { OTPHelper,UserHelper } = Helper.module
 
 
 class authController {
 
   async signUp(req, res) {
     try {
-      console.log("inside signUp", req.body)
-      await UserHelper.userCheck(req.body.email, req.body.userName, req.body.phoneNumber)
+      await UserHelper.userCheck(req.body.email)
       const password = await UserHelper.encryptPassword(req.body.password);
       const data = await model.create({ ...req.body, password });
-      res.json({ data, status: true });
+       return res.json({ data, status: true });
     } catch (error) {
       console.log(error.message)
       res.status(500).send(error);
@@ -113,13 +112,11 @@ class authController {
  
   async login(req, res) {
     try {
-      console.log('Login API main has been accesed');
-      const { usernameOrEmail, password } = req.body
+      const { email, password } = req.body
 
-      if (!usernameOrEmail || !password)
+      if (!email || !password)
         throw { message: 'Email/UserName & password required' };
-      const source = OTPHelper.checkSource(usernameOrEmail);
-      const user = await model.findOne({ [source]: usernameOrEmail });
+      const user = await model.findOne({ [source]: email });
       if (!user || !(await bcrypt.compare(password, user.password))) {
         throw { message: 'Invalid Login Credentials', status: false };
       }
@@ -127,20 +124,6 @@ class authController {
       return res.send({ token, status: true,role: user.role });
     } catch (error) {
       res.json({ error, status: false });
-    }
-  }
-
-
-  async myCourses(req, res) {
-    try {
-      console.log("inside myCourses");
-      const { decodedToken } = req.body;
-      // console.log("id", decodedToken.id);
-      const courses = await model.findOne({ _id: decodedToken.id} ,'courseEnrolled').populate('courseEnrolled')
-      const myCourses = courses.courseEnrolled
-      res.json({ message: "Your courses are :- ", myCourses, status: true });
-    } catch (error) {
-      res.status(404).json(error.message);
     }
   }
 

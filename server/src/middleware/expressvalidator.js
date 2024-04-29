@@ -19,23 +19,7 @@ const validateSignup = [
 ,
 
   // Validate username
-  body('userName')
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage('Username must be at least 3 characters long')
-    .isAlphanumeric()
-    .withMessage('Username must only contain letters and numbers'),
-
-  // Validate phoneNumber
-  body('phoneNumber')
-  .trim()
-  .isLength({ min: 10, max: 10 })
-  .withMessage('phoneNumber must have 10 digits')
-  .isNumeric()
-  .withMessage('Numbers should be numeric'),
-
-
-  // Validate email
+ 
   body('email')
     .trim()
     .isEmail()
@@ -58,10 +42,6 @@ const validateSignup = [
     if(confirmPassword !== password) throw 'Confirm password must match'
   }),
 
-  //Validate terms and conditions
-  body('acceptTerms').custom(async (acceptTerms,{req})=>{
-    if(!acceptTerms) throw "Please Accept Terms"
-  })
 ];
 
 const handleValidationErrors = (req, res, next) => {
