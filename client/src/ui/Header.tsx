@@ -1,11 +1,14 @@
 'use client'
 import React from 'react';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
-    const handleLogout=()=>{
+    const router=useRouter()
+    const handleLogout=(e:any)=>{
+        e.preventDefault();
         localStorage.clear();
-
+        router.push('/auth/login')
     }
   return (
     <AppBar position="static">

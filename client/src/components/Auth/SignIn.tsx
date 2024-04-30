@@ -10,6 +10,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { signInApi } from '@/services/authServices';
 import useFormValidation from '@/hooks/useValidation';
+import { useRouter } from 'next/navigation';
+import LoadingButton from '@/ui/LoadingButton';
 
 function Copyright(props: any) {
   return (
@@ -25,21 +27,34 @@ function Copyright(props: any) {
 }
 
 export default function LogIn() {
+  const router=useRouter()
   const[userData,setUserData]=React.useState(
     {
       email:'',
       password:'', 
     }
   )
+  const[loading,setLoading]=React.useState(false)
   const submitUserData=async(err:any)=>{
     if(Object.keys(err).length)
     {
       // return;
     }
       try {
-          const response=await signInApi(userData)
+        setLoading(true)
+          const response:any=await signInApi(userData)
+          console.log(response);
+          
+          setLoading(false)
+          if(response.status==200 && response?.data?.token){
+
+            localStorage.setItem('token',response.data.token)
+            router.push('/dashboard')
+          }
           return response
       } catch (error) {
+        setLoading(false)
+
           console.log(error);
       }
   }
@@ -92,7 +107,8 @@ console.log(errors);
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
+              <LoadingButton
+              loading={loading}
                 type="button"
                 onClick={handleSubmitSignin}
                 fullWidth
@@ -100,7 +116,7 @@ console.log(errors);
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
-              </Button>
+              </LoadingButton>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

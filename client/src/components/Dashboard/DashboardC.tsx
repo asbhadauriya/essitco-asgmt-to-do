@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import AddTodo from './AddTodo'
 import { fetchAllTodoApi } from '@/services/todoServices'
 import DragDropComponent from './TodoDragDrop'
+import TodoChart from './BarTodo'
 const completed=[
   {
     id: 1,
@@ -66,6 +67,7 @@ function DashboardC() {
   return (
     <div>
       <DragDropComponent pendingTodos={Todos.pending} completedTodos={Todos.completed} onAfterDrop={handleAfterDrop}/>
+        <TodoChart todos={[]}/>
         {open?<AddTodo open={open} setOpen={(val:Boolean)=>{setOpen(val)}}/>:null}</div>
   )
 }
