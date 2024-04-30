@@ -2,8 +2,6 @@ const Todo = require('../models/Todo');
 require('dotenv').config();
 const key = process.env.JWTKEY;
 const Helper = require('../helper/index');
-const { OTPHelper,UserHelper } = Helper.module
-
 
 class todoController {
 
@@ -66,16 +64,6 @@ class todoController {
       res.status(500).json({ message: error.message });
     }
   };
-
-
-  
-
- 
-
-
-
-
-
 
 }
 

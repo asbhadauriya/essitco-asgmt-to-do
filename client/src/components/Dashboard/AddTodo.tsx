@@ -1,21 +1,42 @@
 
+import useFormValidation from "@/hooks/useValidation";
+import DialogeModal from "@/ui/DialogeModalC";
+import FormTextField from "@/ui/FormTextField";
+import LoadingButton from "@/ui/LoadingButton";
 import {  Button, Stack } from "@mui/material";
-import LoadingButton from "../../../ui/LoadingButton";
-import FormTextField from "../../../ui/CommonElements/FormTextField";
-import DialogeModal from "../../../ui/DialogeModal";
+import { useState } from "react";
 
-function AddDesignation({
+function AddTodo({
   open,
   setOpen,
-  data,
-  submitData,
-  changeFields,
-  errors,
-  loading,
+  
 }: any) {
+  const[data,setData]=useState({
+    title:'',
+    description:''
+})
+const[loading,setLoading]=useState(false)
+const changeFields=(e:any)=>{
+    const{name,value}=e.target;
+    handleChange(e)
+    setData((prev:any)=>({...prev,[name]:value}))
+}
+const submitData=(e:any)=>{
+  e.preventDefault();
+  setLoading(true)
+  handleSubmit(e,handleCreateTodo)
+}
+const handleCreateTodo =async(err:any)=>{
+  console.log(err);
+  
+
+}
+const { values, errors, handleChange, handleSubmit }:any = useFormValidation(data);
+;
+
   return (
     <DialogeModal
-      title={"Add Designation"}
+      title={"Add Todo"}
       size={"sm"}
       open={open}
       handleClose={() => {
@@ -24,28 +45,21 @@ function AddDesignation({
     >
       <div style={{ padding: 10 }}>
         <FormTextField
-          label={"Designation Name"}
-          error={errors?.designationName}
+          label={"Title Name"}
+          error={errors?.title}
           onChange={changeFields}
-          name={"designationName"}
-          value={data.designationName}
+          name={"title"}
+          value={data.title}
         />
 <FormTextField
           label={"Description"}
           onChange={changeFields}
-          name={"mailAlias"}
+          name={"description"}
           placeholder={"Start typing Description here..."}
-          value={data.mailAlias}
-          error={errors?.mailAlias}
+          value={data.description}
+          error={errors?.description}
         />
-        {/* <FormTextField
-          label={"Mail alias"}
-          onChange={changeFields}
-          name={"mailAlias"}
-          placeholder={"@mabzone.com"}
-          value={data.mailAlias}
-          error={errors?.mailAlias}
-        /> */}
+       
         <Stack direction="row" spacing={2} justifyContent={"center"}>
           <LoadingButton
             loading={loading}
@@ -70,4 +84,4 @@ function AddDesignation({
   );
 }
 
-export default AddDesignation;
+export default AddTodo;
