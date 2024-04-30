@@ -1,62 +1,81 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-const useFormValidation = (initialState:any) => {
+function useFormValidation(initialState: any, removeErrorFields: any = []) {
   const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (event:any) => {
-    const { name, value } = event.target;
-    setValues({
-      ...values,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = (event:any,fn?:any) => {
-    event.preventDefault();
-    const err=validate(values)
-    setErrors(err);
-    fn(err)
-    setIsSubmitting(true);
-  };
-
-  const validate = (values:any) => {
-    let errors:any = {};
-
-    if (!values.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      errors.email = 'Email is invalid';
+  const validateField = (name: any, value: any) => {
+    let error = null;
+    if (!value) {
+      return (error = "This field is required");
     }
 
-    if (!values.password) {
-      errors.password = 'Password is required';
-    } else if (values.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters long';
-    }
-
-    if (!values.confirmPassword) {
-      errors.confirmPassword = 'Confirm Password is required';
-    } else if (values.confirmPassword !== values.password) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-    Object.keys(values).forEach((key) => {
-        if (!values[key]) {
-          errors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+    // Validation logic based on field name
+    switch (name) {
+      case "email":
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Invalid email address";
         }
-      });
+        break;
+      case "mailAlias":
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Mail aliaa should be an email";
+        }
+        break;
+      case "password":
+        if (value.length < 8) {
+          error = "Password must be at least 8 characters long";
+        }
+        break;
+      case "number":
+        if (isNaN(value)) {
+          error = "Please enter a valid number";
+        }
+        break;
+      default:
+        break;
+    }
 
-    return errors;
+    return error;
   };
 
-  return {
-    values,
-    errors,
-    handleChange,
-    handleSubmit,
-    isSubmitting
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setValues((prevValues: any) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
   };
-};
+
+  const handleSubmit = (e: any, fun: any) => {
+    e.preventDefault();
+    const newErrors: any = {};
+
+    // Validate all fields
+    Object.entries(values).forEach(([name, value]) => {
+      if (!removeErrorFields || !removeErrorFields.includes(name)) {
+        const error = validateField(name, value);
+        if (error) {
+          newErrors[name] = error;
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    if (!Object.keys(newErrors).length && fun) {
+      // Assuming addEmployee doesn't take any arguments
+      fun(newErrors);
+    } else {
+      console.log(newErrors);
+    }
+  };
+
+  return { values, errors, handleChange, handleSubmit };
+}
 
 export default useFormValidation;
