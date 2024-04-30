@@ -31,8 +31,41 @@ class todoController {
     }
 
   }
-
+  async updateTodo(req, res){
+    try {
+      const todoList = await TodoList.findById(req.params.id);
   
+      if (todoList == null) {
+        return res.status(404).json({ message: 'To Do List not found' });
+      }
+  
+      if (req.body.title != null) {
+        todoList.title = req.body.title;
+      }
+  
+      if (req.body.description != null) {
+        todoList.description = req.body.description;
+      }
+  
+      if (req.body.completed != null) {
+        todoList.completed = req.body.completed;
+      }
+  
+      const updatedTodoList = await todoList.save();
+      res.json(updatedTodoList);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
+
+  async deleteTodo(req, res){
+    try {
+      await TodoList.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Deleted To Do List' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 
 
   
