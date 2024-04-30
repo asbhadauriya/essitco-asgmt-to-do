@@ -1,6 +1,13 @@
+import api from "@/api/api";
 import TodoCard from "@/components/Dashboard/Todlist";
 import { Grid } from "@mui/material";
+const getAllTodoList=()=>{
+  const response:any=api.get('todo/get-all')
+  console.log(response.status);
+  
+}
 function Dashbaord() {
+  const todos=getAllTodoList()
   return (
     <main>
              <Grid container spacing={2}>

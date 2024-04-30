@@ -22,10 +22,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-Routers
-app.use('/', (req,res)=>{
-  res.json({message : "successful "})
-})
+// Routers
+// app.use('/', (req,res)=>{
+//   res.json({message : "successful "})
+// })
 app.use('/auth', Api.authRouter); 
 app.use('/todo', Api.todoRouter); ;
 app.use('/status', (_req, res) => {

@@ -34,7 +34,7 @@ export default function LogIn() {
   const submitUserData=async(err:any)=>{
     if(Object.keys(err).length)
     {
-      return;
+      // return;
     }
       try {
           const response=await signInApi(userData)
@@ -63,6 +63,8 @@ console.log(errors);
             </Typography>
             <Box component="form" noValidate  sx={{ mt: 1 }}>
               <TextField
+              error={errors.email}
+              helperText={errors.email}
               onChange={changeInfoData}
                 margin="normal"
                 required
@@ -74,6 +76,8 @@ console.log(errors);
                 autoFocus
               />
               <TextField
+              error={errors.password}
+              helperText={errors.password}
               onChange={changeInfoData}
                 margin="normal"
                 required
