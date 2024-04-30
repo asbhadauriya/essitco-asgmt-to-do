@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import Header from '@/ui/Header';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface LayoutProps {
 export default function DashLayout({ children }: LayoutProps): React.JSX.Element {
   return (
     <>
+    <Header/>
       <GlobalStyles
         styles={{
           body: {

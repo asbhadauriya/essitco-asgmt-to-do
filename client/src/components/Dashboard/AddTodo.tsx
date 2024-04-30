@@ -31,7 +31,7 @@ const handleCreateTodo =async(err:any)=>{
   
 
 }
-const { values, errors, handleChange, handleSubmit }:any = useFormValidation(data);
+const { values, errors, handleChange, handleSubmit }:any = useFormValidation(data,["description"]);
 ;
 
   return (
