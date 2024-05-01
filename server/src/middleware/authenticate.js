@@ -6,21 +6,15 @@ const key = process.env.JWTKEY;
 
 module.exports = function (req, res, next) {
     try{
-    const authHeader = req.headers['authorization'] 
-    if (!authHeader) throw'authorization missing'
-    // const splitHeader = authHeader.split("Bearer ")
-    
+      const authHeader = req.headers["authorization"];
+    if (!authHeader) throw "authorization missing";
+    // const splitHeader = authHeader.split("Bearer ")[1];
+    jwt.verify(authHeader, key);
+    const decodedToken = jwt.decode(authHeader, key);
+    console.log(decodedToken);
+    req.user = decodedToken;
+    if (!decodedToken) throw "not having token please login";
     next();
-    jwt.verify(token, secretKey, (err, decoded) => {
-
-        if (err) {
-          return res.status(401).json({ message: 'Invalid token' });
-        }
-    req.body.decodedToken = decodedToken
-
-        req.user = decoded.user;
-        next();
-      });
     // if(!decodedToken) throw "not having token please login"
     }
     catch(err) {
