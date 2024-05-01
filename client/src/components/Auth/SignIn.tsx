@@ -161,3 +161,5 @@ export default function LogIn() {
     </>
   );
 }
+//        document.cookie = `token=${response.data.token}; path=/`;
+//document.cookie = `accessToken=${response.data.accessToken}; path=/`;
