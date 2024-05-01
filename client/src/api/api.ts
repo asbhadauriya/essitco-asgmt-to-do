@@ -13,7 +13,13 @@ api.interceptors.request.use(
       }
     return config;
   },
-  (error) => {
+  (erro:any) => {
+    if (error.response.status === 401) {
+      // Check if token is expired
+  
+        logoutUser();
+      
+    }
     return Promise.reject(error);
   }
 );
@@ -29,3 +35,13 @@ api.interceptors.response.use(
 );
 
 export default api;
+const logoutUser = () => {
+  localStorage.clear();
+  deleteAllCookies()
+  if(!window.location.pathname.includes('auth'))
+    {
+
+      window.location.href = '/auth/signin';
+    }
+  
+};
