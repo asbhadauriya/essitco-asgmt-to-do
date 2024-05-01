@@ -22,3 +22,12 @@ export const createTodoApi=async(body:TododBody)=>{
         CommonError(error.response.data.message)
     }
 }
+export const updateTodoApi=async(id:any,body:any)=>{
+    try {
+        const response=await api.put('/todo/update/'+id,body)
+        return response;
+    } catch (error:any) {
+        
+        CommonError(error.response.data.message)
+    }
+}

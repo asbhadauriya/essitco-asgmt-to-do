@@ -1,64 +1,5 @@
-const Todo = require("../models/Todo");
-require("dotenv").config();
-const key = process.env.JWTKEY;
-const Helper = require("../helper/index");
-const { OTPHelper, TodoHelper } = Helper.module;
-
-class todoController {
-  async getAllTodo(req, res) {
-    try {
-      console.log(req.user.id);
-      const todos = await Todo.find({ user: req.user.id });
-      return res.json(todos);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
-  async createTodo(req, res) {
-    try {
-      await TodoHelper.todoCheck(req.body.title);
-
-      const todo = new Todo({
-        user: req.user.id,
-        title: req.body.title,
-        description: req.body.description,
-        completed: false,
-        day: req.body.day
-      });
-      const newTodo = await todo.save();
-      res.status(201).json(newTodo);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-  }
-}
-
-module.exports = new todoController();
-todoRouter.get("/get-all", authMiddleware, todoController.getAllTodo);
-
-const mongoose = require("mongoose");
-
-const Todo = new mongoose.Schema({
-  title: { type: String, required: [true, "Todo title is Required"] },
-  description: { type: String },
-  status: { type: Boolean, default: false },
-  day: { type: String },
-});
-
-module.exports = mongoose.model("Todo", Todo);
-const todoRouter = require("express").Router();
-const authController = require("../controllers/authController");
-const Controller = require("../controllers/index");
-const { todoController } = Controller.module;
-const authMiddleware = require("../middleware/authenticate");
-
-todoRouter.post("/create", authMiddleware, todoController.createTodo);
-todoRouter.get("/get-all", authMiddleware, todoController.getAllTodo);
-
-module.exports = todoRouter;
-// theme.ts
-'use client';
-import { createTheme, Theme } from '@mui/material/styles';
+'use client'
+import { createTheme } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -120,6 +61,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          border: 'none', // Remove border from all labels
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
           root: {
@@ -139,7 +87,7 @@ const theme = createTheme({
             // Add other styles for contained variant here
           },
           outlined: {
-            border: '2px solid #C61C66',
+            // border: '2px solid #C61C66',
             background:'transparent',
             color: '#C61C66',
             '&:hover': {
@@ -211,13 +159,3 @@ const theme = createTheme({
 
 
 export default theme;
-export  function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-  
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i];
-      var eqPos = cookie.indexOf("=");
-      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-    }
-  }

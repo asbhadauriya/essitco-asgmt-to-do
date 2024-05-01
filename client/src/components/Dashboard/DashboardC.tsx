@@ -1,14 +1,13 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import AddTodo from "./AddTodo";
-import { fetchAllTodoApi } from "@/services/todoServices";
+import { fetchAllTodoApi, updateTodoApi } from "@/services/todoServices";
 import DragDropComponent from "./TodoDragDrop";
 import TodoChart from "./BarTodo";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, LinearProgress, Typography } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TodoCard from "./Todlist";
-
 
 function DashboardC() {
   const [open, setOpen] = useState<Boolean>(false);
@@ -17,23 +16,37 @@ function DashboardC() {
     completed: [],
     pending: [],
   });
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
     getAllTodo();
   }, []);
   const getAllTodo = async () => {
     const response: any = await fetchAllTodoApi();
     const data = response.data;
+    calculateProgress(data);
     const completedTodos = data.filter((todo: any) => todo.completed === true);
     const pendingTodos = data.filter((todo: any) => todo.completed === false);
+
     setTodos({
       allTodos: data,
       completed: completedTodos,
       pending: pendingTodos,
     });
   };
+  const calculateProgress = (todos: any) => {
+    if (todos.length === 0) {
+      setProgress(0);
+      return;
+    }
+    const completedCount = todos.filter((todo: any) => todo.completed).length;
+    const totalTasks = todos.length;
+    const percentage = (completedCount / totalTasks) * 100;
+    setProgress(percentage);
+  };
 
   const handleAfterDrop = useCallback(
-    (todo: any, source: string, destination: string) => {
+    async (todo: any, source: string, destination: string) => {
+      await updateTodoApi(todo._id, { completed: destination === "completed" });
       setTodos((prevTodos) => {
         // Create a deep copy of the previous Todos state
         const updatedTodos: any = { ...prevTodos };
@@ -65,6 +78,25 @@ function DashboardC() {
   return (
     <div>
       <ToastContainer />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "10px",
+        }}
+      >
+        <Typography variant={"h5"} color={"secondary.dark"}>
+          Todo List
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(!open);
+          }}
+        >
+          + Add Todo
+        </Button>
+      </div>
       <Grid container spacing={2}>
         <Grid item lg={4} sm={6} xs={12}>
           <TodoCard
@@ -88,25 +120,9 @@ function DashboardC() {
           />
         </Grid>
       </Grid>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px",
-        }}
-      >
-        <Typography variant={"h5"} color={"secondary.dark"}>
-          Todo List
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setOpen(!open);
-          }}
-        >
-          + Add Todo
-        </Button>
+      <LinearProgress variant="determinate" value={progress} />
+      <div style={{ textAlign: "center", marginTop: "5px" }}>
+        <span>{progress.toFixed(2)}%</span>
       </div>
       <DragDropComponent
         pendingTodos={Todos.pending}

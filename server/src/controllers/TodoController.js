@@ -32,7 +32,7 @@ class todoController {
   }
   async updateTodo(req, res) {
     try {
-      const todoList = await TodoList.findById(req.params.id);
+      const todoList = await Todo.findById(req.params.id);
 
       if (todoList == null) {
         return res.status(404).json({ message: "To Do List not found" });
