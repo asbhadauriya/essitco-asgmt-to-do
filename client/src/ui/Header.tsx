@@ -8,7 +8,7 @@ const Header = () => {
     const handleLogout=(e:any)=>{
         e.preventDefault();
         localStorage.clear();
-        router.push('/auth/login')
+        router.push('/auth/signin')
     }
   return (
     <AppBar position="static">
