@@ -1,16 +1,27 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import Button, { ButtonProps } from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const LoadingButton = ({ loading, onClick, children, ...rest }:any) => {
-  return (
-    <Button
-      loading={loading}
-      onClick={onClick}
-      {...rest}
-    >
-      {children}
-    </Button>
-  );
+interface LoadingButtonProps extends ButtonProps {
+  loading: boolean;
 }
+
+const LoadingButton: React.FC<LoadingButtonProps> = ({
+  loading,
+  children,
+  ...buttonProps // Destructure other ButtonProps
+}) => {
+  return (
+    <div>
+      <Button
+        {...buttonProps} // Spread other ButtonProps
+        variant="contained"
+        color="primary"
+        disabled={loading}
+      >
+        {loading ? <CircularProgress size={24} color="inherit" /> : children}
+      </Button>
+    </div>
+  );
+};
 
 export default LoadingButton;
