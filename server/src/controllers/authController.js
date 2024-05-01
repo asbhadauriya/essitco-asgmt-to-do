@@ -41,15 +41,24 @@ class authController {
       if (!user || !(await bcrypt.compare(password, user.password))) {
         throw { message: "Invalid Login Credentials", status: false };
       }
-      const token = jwt.sign(
-        { email: user.email, id: user._id, role: user.role },
+      const accessToken = jwt.sign(
+        { email: user.email, id: user._id, email: user.email },
         key,
         { expiresIn: "10h" }
       );
+      const refreshToken = jwt.sign(
+        { email: user.email, id: user._id, email: user.email },
+        key,
+        { expiresIn: "30d" }
+      );
 
-      return res.send({ token, status: true, role: user.role });
+      return res.send({
+        email: user.email,
+        token: accessToken,
+        refreshToken: refreshToken,
+      });
     } catch (error) {
-      res.json({ error, status: false });
+      return res.status(401).json({ error, status: false });
     }
   }
 }

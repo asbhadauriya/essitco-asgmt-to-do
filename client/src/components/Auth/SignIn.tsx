@@ -13,6 +13,8 @@ import useFormValidation from "@/hooks/useValidation";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/ui/LoadingButton";
 import { CommonSuccess } from "@/helpers/CommonMessage";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Copyright(props: any) {
   return (
@@ -34,6 +36,8 @@ function Copyright(props: any) {
 
 export default function LogIn() {
   const router = useRouter();
+  const [passwordEye, setPasswordEye] = React.useState(false);
+
   const [userData, setUserData] = React.useState({
     email: "",
     password: "",
@@ -49,9 +53,13 @@ export default function LogIn() {
       console.log(response);
 
       setLoading(false);
-      if (response.status == 200 && response?.data?.token) {
+      if (response.status == 200 && response?.data?.email) {
         CommonSuccess("User Login Suuccessfully");
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", response.data.email);
+        document.cookie = `token=${response.data.token}; path=/`;
+        document.cookie = `accessToken=${response.data.accessToken}; path=/`;
+
+
         router.push("/dashboard");
       }
       return response;
@@ -103,9 +111,24 @@ export default function LogIn() {
           fullWidth
           name="password"
           label="Password"
-          type="password"
+          type={!passwordEye ? "password" : "text"}
           id="password"
           autoComplete="current-password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  edge="start"
+                  onClick={() => setPasswordEye(!passwordEye)}
+                >
+                  {passwordEye ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+            sx: {
+              "& fieldset": { top: 0 },
+            },
+          }}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}

@@ -4,7 +4,14 @@ import AddTodo from "./AddTodo";
 import { fetchAllTodoApi, updateTodoApi } from "@/services/todoServices";
 import DragDropComponent from "./TodoDragDrop";
 import TodoChart from "./BarTodo";
-import { Button, Grid, LinearProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  LinearProgress,
+  TableHead,
+  Typography,
+} from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TodoCard from "./Todlist";
@@ -16,6 +23,7 @@ function DashboardC() {
     completed: [],
     pending: [],
   });
+  const [currSelect, setCurrSelect] = useState();
   const [progress, setProgress] = useState(0);
   useEffect(() => {
     getAllTodo();
@@ -120,10 +128,12 @@ function DashboardC() {
           />
         </Grid>
       </Grid>
-      <LinearProgress variant="determinate" value={progress} />
-      <div style={{ textAlign: "center", marginTop: "5px" }}>
-        <span>{progress.toFixed(2)}%</span>
-      </div>
+      <Box className="mt-5">
+        <LinearProgress variant="determinate" value={progress} />
+        <div style={{ textAlign: "center", marginTop: "5px" }}>
+          <span>{progress.toFixed(2)}%</span>
+        </div>
+      </Box>
       <DragDropComponent
         pendingTodos={Todos.pending}
         completedTodos={Todos.completed}
@@ -144,3 +154,11 @@ function DashboardC() {
 }
 
 export default DashboardC;
+
+const Table = () => {
+  return (
+    <>
+      <Table></Table>
+    </>
+  );
+};
