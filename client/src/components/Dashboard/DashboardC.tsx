@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TodoCard from "./Todlist";
 import TodoTable from "./TodoTable";
+import WelcomeCard from "./WelcomeCard";
 
 function DashboardC() {
   const [open, setOpen] = useState<Boolean>(false);
@@ -87,6 +88,8 @@ function DashboardC() {
   return (
     <div>
       <ToastContainer />
+      <WelcomeCard />
+
       <div
         style={{
           display: "flex",

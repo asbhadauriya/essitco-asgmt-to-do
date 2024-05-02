@@ -33,7 +33,7 @@ const response=NextResponse.next({
      
       if (!token && !req.nextUrl.pathname.startsWith('/auth')) {
 
-        return Response.redirect(new URL('/auth/login', req.url))
+        return Response.redirect(new URL('/auth/signin', req.url))
       }
      
       

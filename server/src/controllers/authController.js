@@ -53,6 +53,7 @@ class authController {
       );
      
       return res.send({
+        name: user.firstName,
         email: user.email,
         token: accessToken,
         refreshToken: refreshToken,

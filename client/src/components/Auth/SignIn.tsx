@@ -57,7 +57,7 @@ export default function LogIn() {
         CommonSuccess("User Login Suuccessfully");
         localStorage.setItem("email", response.data.email);
         localStorage.setItem("token", response.data.token);
-
+        localStorage.setItem("name", response.data.name);
         document.cookie = `token=${response.data.token}; path=/`;
         document.cookie = `accessToken=${response.data.accessToken}; path=/`;
 
