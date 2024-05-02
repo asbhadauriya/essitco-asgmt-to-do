@@ -5,7 +5,7 @@ mongoose.Promise = Promise;
 // mongoose connection
 const connectDB = async () => {
     try {
-        const DB = `mongodb+srv://akshay:akshay@cluster0.ye6gzxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+        const DB = process.env.MONGOURI
         // const DB = process.env.MONGOCONNECTION
         mongoose.connect(DB, {
             autoIndex: true,
