@@ -1,11 +1,17 @@
 'use client'
 
+import { CommonSuccess } from "@/helpers/CommonMessage";
 import useFormValidation from "@/hooks/useValidation";
 import { signUpApi } from "@/services/authServices";
+import LoadingButton from "@/ui/LoadingButton";
 import { Box, Button, Checkbox, FormControlLabel, Grid, Link, TextField, Typography } from "@mui/material"
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function Register() {
+  const router=useRouter()
+  const [loading, setLoading] = useState(false);
+
   const[userData,setUserData]=useState(
     {
       firstName:'',
@@ -21,10 +27,21 @@ function Register() {
       {
         return;
       }
+      setLoading(true);
         try {
-            const response=await signUpApi(userData)
+
+            const response:any=await signUpApi(userData)
+      setLoading(false);
+
+            if (response?.status == 200) {
+              CommonSuccess("User Added Suuccessfully");
+              router.push('/auth/signin')
+            }
+            console.log(response)
             return response
         } catch (error) {
+      setLoading(false);
+
             console.log(error);
         }
     }
@@ -115,14 +132,15 @@ console.log(errors);
         control={<Checkbox value="remember" color="primary" />}
         label="Remember me"
       />
-      <Button
+      <LoadingButton
+      loading={loading}
         type="submit"
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
       >
         Sign Up
-      </Button>
+      </LoadingButton>
       <Grid container>
         <Grid item xs>
           <Link href="#" variant="body2">

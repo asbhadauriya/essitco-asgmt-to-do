@@ -31,6 +31,10 @@ function useFormValidation(initialState: any, removeErrorFields: any = []) {
         if (isNaN(value)) {
           error = "Please enter a valid number";
         }
+        case "confirmPassword":
+          if (value!=values.password) {
+            error = "Password doesn't Match";
+          }
         break;
       default:
         break;
