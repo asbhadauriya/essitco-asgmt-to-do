@@ -1,5 +1,6 @@
 
 Esscito-assgmt-to-do
+
 This project consists of a client-side application developed using Next.js and a server-side application developed using Node.js.
 
 Setup
@@ -23,6 +24,7 @@ PORT=3000
 VERIFYKEY=verifykeydummy
 OTPKEY=otpkeydummy
 JWTKEY=secretkey
+MONGOURI=mongodb+srv://akshay:akshay@cluster0.ye6gzxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 Running the Applications
 Client (Next.js)
 To start the client application, run the following command in the client directory:
