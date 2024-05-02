@@ -27,7 +27,7 @@ class authController {
       await UserHelper.updateData(req.params.email, password);
       res.send({ message: "Password Updated Successfully" });
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({ error, status: false });
     }
   }
 
