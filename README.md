@@ -16,6 +16,9 @@ npm install
 cd ../server
 npm install
 Configuration
+Client
+Create a .env file in the client directory with the following environment variables:
+NEXT_PUBLIC_LIVE_API_URL='http://localhost:3008'
 Server
 Create a .env file in the server directory with the following environment variables:
 
