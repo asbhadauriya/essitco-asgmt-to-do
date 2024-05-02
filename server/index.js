@@ -11,7 +11,7 @@ const app = express();
 
 const server = http.createServer(app);
 
-const port = 3008;
+const port =  process.env.PORT||3008;
 
 // env()
 // Connect to the database

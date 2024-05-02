@@ -1,7 +1,7 @@
 import { deleteAllCookies } from '@/helpers/CommonFunctions';
 import axios from 'axios';
 const api = axios.create({
-  baseURL:'http://localhost:3008/',
+  baseURL:process.env.NEXT_PUBLIC_LIVE_API_URL,
   // withCredentials: true,
 });
 
