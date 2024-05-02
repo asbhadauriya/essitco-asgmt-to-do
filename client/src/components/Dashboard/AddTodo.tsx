@@ -1,19 +1,28 @@
 import api from "@/api/api";
 import { CommonError, CommonSuccess } from "@/helpers/CommonMessage";
 import useFormValidation from "@/hooks/useValidation";
-import { createTodoApi } from "@/services/todoServices";
+import { createTodoApi, updateTodoApi } from "@/services/todoServices";
 import DialogeModal from "@/ui/DialogeModalC";
 import FormTextField from "@/ui/FormTextField";
 import LoadingButton from "@/ui/LoadingButton";
 import { Button, Stack } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function AddTodo({ open, setOpen, afterAdd }: any) {
+function AddTodo({ title,open, setOpen, afterAdd,todoData }: any) {
+  console.log(todoData);
+  
   const [data, setData] = useState({
-    title: "",
-    date: "",
-    description: "",
+    title: todoData?.title||'',
+    date: todoData?.date,
+    description: todoData?.description||'',
   });
+  useEffect(()=>{
+setData({
+  title: todoData?.title,
+  date: todoData?.date,
+  description: todoData?.description,
+})
+  },[todoData])
   const [loading, setLoading] = useState(false);
   const changeFields = (e: any) => {
     const { name, value } = e.target;
@@ -29,14 +38,22 @@ function AddTodo({ open, setOpen, afterAdd }: any) {
     if (Object.keys(err).length) {
       return;
     }
-    debugger;
-    const response: any = await createTodoApi(data);
-    if (response.status == 201) {
+     if(todoData){
+      const response:any=await updateTodoApi(todoData?._id,data);
+      afterAdd(response);
+
+    return response;
+}
+    else{
+    
+    const response:any= await createTodoApi(data);
+      if (response.status == 201) {
       afterAdd();
       setOpen(false);
       CommonSuccess("Todod Added successfully");
     }
     CommonError("Something went wrong");
+  }
   };
   const { values, errors, handleChange, handleSubmit }: any = useFormValidation(
     data,
@@ -44,7 +61,7 @@ function AddTodo({ open, setOpen, afterAdd }: any) {
   );
   return (
     <DialogeModal
-      title={"Add Todo"}
+      title={title}
       size={"sm"}
       open={open}
       handleClose={() => {
@@ -65,14 +82,14 @@ function AddTodo({ open, setOpen, afterAdd }: any) {
           error={errors?.date}
           onChange={changeFields}
           name={"date"}
-          value={data.date}
+          value={data.date ? data.date.substring(0, 10) : ''}
         />
         <FormTextField
           label={"Description"}
           onChange={changeFields}
           name={"description"}
           placeholder={"Start typing Description here..."}
-          value={data.description}
+          value={data?.description}
           error={errors?.description}
         />
 

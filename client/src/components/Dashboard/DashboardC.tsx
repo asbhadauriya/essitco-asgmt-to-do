@@ -7,6 +7,7 @@ import TodoChart from "./BarTodo";
 import {
   Box,
   Button,
+  Card,
   Grid,
   LinearProgress,
   TableHead,
@@ -15,6 +16,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TodoCard from "./Todlist";
+import TodoTable from "./TodoTable";
 
 function DashboardC() {
   const [open, setOpen] = useState<Boolean>(false);
@@ -23,7 +25,6 @@ function DashboardC() {
     completed: [],
     pending: [],
   });
-  const [currSelect, setCurrSelect] = useState();
   const [progress, setProgress] = useState(0);
   useEffect(() => {
     getAllTodo();
@@ -129,23 +130,31 @@ function DashboardC() {
         </Grid>
       </Grid>
       <Box className="mt-5">
+      <TodoTable todos={Todos.allTodos} afterAdd={ getAllTodo}/>
+      </Box>
+      <Box className="mt-5">
+        <Typography>To-Do Drag & Drop</Typography>
         <LinearProgress variant="determinate" value={progress} />
         <div style={{ textAlign: "center", marginTop: "5px" }}>
           <span>{progress.toFixed(2)}%</span>
         </div>
-      </Box>
       <DragDropComponent
         pendingTodos={Todos.pending}
         completedTodos={Todos.completed}
         onAfterDrop={handleAfterDrop}
       />
+      </Box>
+      <Card className="mt-5">
+
       <TodoChart todos={Todos.allTodos} />
+      </Card>
       {open ? (
         <AddTodo
           open={open}
           setOpen={(val: Boolean) => {
             setOpen(val);
           }}
+          title={'Add Todo'}
           afterAdd={getAllTodo}
         />
       ) : null}
@@ -155,10 +164,4 @@ function DashboardC() {
 
 export default DashboardC;
 
-const Table = () => {
-  return (
-    <>
-      <Table></Table>
-    </>
-  );
-};
+

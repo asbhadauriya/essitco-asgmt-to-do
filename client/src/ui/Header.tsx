@@ -2,12 +2,14 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { deleteAllCookies } from '@/helpers/CommonFunctions';
 
 const Header = () => {
     const router=useRouter()
     const handleLogout=(e:any)=>{
         e.preventDefault();
         localStorage.clear();
+        deleteAllCookies()
         router.push('/auth/signin')
     }
   return (

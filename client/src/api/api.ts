@@ -1,7 +1,8 @@
+import { deleteAllCookies } from '@/helpers/CommonFunctions';
 import axios from 'axios';
 const api = axios.create({
   baseURL:'http://localhost:3008',
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 // Request interceptor
@@ -14,7 +15,7 @@ api.interceptors.request.use(
       }
     return config;
   },
-  (erro:any) => {
+  (error:any) => {
     if (error.response.status === 401) {
       // Check if token is expired
   

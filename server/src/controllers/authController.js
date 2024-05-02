@@ -44,14 +44,14 @@ class authController {
       const accessToken = jwt.sign(
         { email: user.email, id: user._id, email: user.email },
         key,
-        { expiresIn: "10h" }
+        { expiresIn: "1h" }
       );
       const refreshToken = jwt.sign(
         { email: user.email, id: user._id, email: user.email },
         key,
         { expiresIn: "30d" }
       );
-
+     
       return res.send({
         email: user.email,
         token: accessToken,
